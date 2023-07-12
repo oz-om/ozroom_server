@@ -13,7 +13,7 @@ module.exports = (client, io) => {
   });
 
   client.on("makeIntegrationCalls", (request) => {
-    io.to(request.receiverId).emit("makeIntegrationCalls", request.members);
+    io.to(request.receiverId).emit("makeIntegrationCalls", request.Peers);
   });
 
   client.on("integrateCallRequest", (request) => {
