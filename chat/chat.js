@@ -32,4 +32,17 @@ module.exports = (client, io) => {
   client.on("controlled_his_audio_track", (trackDetails) => {
     io.to(trackDetails.member).emit("controlled_his_audio_track", { id: trackDetails.targetUser, selfControlled: trackDetails.selfControlled });
   });
+
+  client.on("reject", (receiverId) => {
+    io.to(receiverId).emit("rejected");
+  });
+  client.on("meetingEnded", (receiverId) => {
+    io.to(receiverId).emit("meetingEnded");
+  });
+  client.on("memberEndCall", (request) => {
+    io.to(request.receiverId).emit("memberEndCall", request.targetMember);
+  });
+  client.on("adminKillMember", (request) => {
+    io.to(request.receiverId).emit("adminKillMember", request.targetMember);
+  });
 };
