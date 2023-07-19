@@ -7,7 +7,9 @@ module.exports = (client, io) => {
     const { senderRequest, receiverRequest } = request;
     io.to(receiverRequest).emit("receiveCallRequest", { senderRequest });
   });
-
+  client.on("joinToRoom", (request) => {
+    client.join(request.room);
+  });
   client.on("requestIntegrationCalls", (request) => {
     io.to(request.receiverId).emit("requestIntegrationCalls", request.senderId);
   });
@@ -44,5 +46,13 @@ module.exports = (client, io) => {
   });
   client.on("adminKillMember", (request) => {
     io.to(request.receiverId).emit("adminKillMember", request.targetMember);
+  });
+
+  client.on("sendMessage", (msg) => {
+    if (msg.to == "group") {
+      client.to(msg.room).emit("receive_msg", msg);
+    } else {
+      io.to(msg.to.socketId).emit("receive_msg", msg);
+    }
   });
 };
