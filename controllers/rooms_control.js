@@ -29,7 +29,18 @@ exports.getMyRooms = (req, res) => {
 exports.getRooms = (req, res) => {
   getRooms(req.userInfo.country)
     .then((result) => {
-      res.status(200).json(result);
+      let page = req.query.currentPage;
+      let limit = req.query.limit;
+      let startIndex = (page - 1) * limit;
+      let endIndex = page * limit;
+
+      let rooms = result.rooms.slice(startIndex, endIndex);
+      let pagination = {
+        getRooms: true,
+        totalRooms: result.rooms.length,
+        rooms,
+      };
+      res.status(200).json(pagination);
     })
     .catch((err) => {
       res.status(500).json(err);

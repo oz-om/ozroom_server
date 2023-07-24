@@ -1,6 +1,6 @@
 const db = require("../config/database");
 
-exports.register = (username, email, password) => {
+exports.register = (username, email, password, country) => {
   return new Promise((resolve, reject) => {
     const connection = db("register_model");
 
@@ -20,8 +20,10 @@ exports.register = (username, email, password) => {
           msg: "user already exist",
         });
       }
-      let query = `INSERT INTO users (username, email, password) VALUES (?,?,?)`;
-      connection.query(query, [username, email, password], (err) => {
+      let randomAvatarName = new Date().getTime();
+      let userRandomAvatar = `https://avatars.dicebear.com/api/bottts/${randomAvatarName}.svg`;
+      let query = `INSERT INTO users (username, email, password, avatar, country) VALUES (?,?,?,?,?)`;
+      connection.query(query, [username, email, password, userRandomAvatar, country], (err) => {
         if (err) {
           console.log(err);
           connection.end();

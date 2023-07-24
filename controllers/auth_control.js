@@ -2,9 +2,9 @@ const auth_model = require("../models/auth_model");
 const jwt = require("jsonwebtoken");
 
 exports.register = (req, res) => {
-  const { user, email, pass } = req.body;
+  const { user, email, pass, country } = req.body;
   auth_model
-    .register(user, email, pass)
+    .register(user, email, pass, country)
     .then((result) => {
       res.json(result);
     })

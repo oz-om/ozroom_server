@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-
+const { getUserInfo } = require("../models/user_model");
 exports.isUser = (req, res) => {
   const key = process.env.JWT_SECRET;
   const token = req.cookies.token;
@@ -7,17 +7,20 @@ exports.isUser = (req, res) => {
     jwt.verify(token, key, (err, user) => {
       if (err) {
         return res.json({
-          login: false,
+          loggedIn: false,
         });
       }
-      res.json({
-        loggedIn: true,
-        user,
-      });
+      getUserInfo(user.id, user.email)
+        .then((user) => {
+          res.status(200).json(user);
+        })
+        .catch((error) => {
+          res.status(500).json(error);
+        });
     });
   } else {
     res.json({
-      login: false,
+      loggedIn: false,
     });
   }
 };
@@ -32,8 +35,10 @@ exports.verify = (req, res, next) => {
           login: false,
         });
       }
-      req.userInfo = user;
-      next();
+      getUserInfo(user.id, user.email).then((user) => {
+        req.userInfo = user.user;
+        next();
+      });
     });
   }
 };

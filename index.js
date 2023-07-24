@@ -23,10 +23,10 @@ io.on("connection", (client) => {
   client.emit("welcome", client.id);
 
   require("./chat/chat")(client, io);
+});
 
-  client.on("disconnect", () => {
-    console.log("\nclint leave");
-  });
+io.on("disconnect", () => {
+  console.log("\nclint leave");
 });
 
 app.use(
@@ -45,10 +45,12 @@ const routes = {
   verify: require("./routes/isUser").verify,
   auth_router: require("./routes/auth_router"),
   rooms_router: require("./routes/rooms_router"),
+  user_router: require("./routes/user_router"),
   upload: require("./routes/upload"),
 };
 app.use("/", routes.auth_router);
 app.use("/", routes.rooms_router);
+app.use("/", routes.user_router);
 app.use("/", verify, routes.upload);
 
 app.get("/init", require("./routes/isUser").isUser);
