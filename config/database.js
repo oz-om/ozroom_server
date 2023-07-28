@@ -35,15 +35,15 @@ CREATE TABLE IF NOT EXISTS rooms (
   REFERENCES users(id)
   ON DELETE CASCADE ON UPDATE CASCADE
   ) ENGINE=InnoDB;
-
-  DROP TRIGGER IF EXISTS TR_UpRmCountry;
-  CREATE TRIGGER TR_UpRmCountry
-  AFTER UPDATE ON users
-  FOR EACH ROW
-  BEGIN
-    UPDATE rooms SET country = NEW.country WHERE owner_id = NEW.id;
-  END;
 `;
+
+// DROP TRIGGER IF EXISTS TR_UpRmCountry;
+//   CREATE TRIGGER TR_UpRmCountry
+//   AFTER UPDATE ON users
+//   FOR EACH ROW
+//   BEGIN
+//     UPDATE rooms SET country = NEW.country WHERE owner_id = NEW.id;
+//   END;
 
 connection.connect((err) => {
   if (err) {
